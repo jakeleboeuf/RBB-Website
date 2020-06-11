@@ -9,6 +9,5 @@ export const getUser = (type = 'default') => {
 };
 
 export const setUser = ({ type = 'default', user }) => {
-  console.log(user);
   window.localStorage.setItem(`user::${type}`, user);
 };
