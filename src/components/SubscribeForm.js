@@ -1,14 +1,27 @@
 import React from 'react';
+import * as Sentry from '@sentry/browser';
 
 import { FormControl, FormLabel, Input, Stack, Text } from '@chakra-ui/core';
 import Button from './Button';
 
+const FORM_USER = 'a5fccdceb916e00a46d603ed8';
+const FORM_ID = '992a06eec8';
+
 const SubscribeForm = () => {
-  const formAction =
-    'https://rebuildblackbusiness.us10.list-manage.com/subscribe/post?u=a5fccdceb916e00a46d603ed8&amp;id=992a06eec8';
+  const formAction = `https://rebuildblackbusiness.us10.list-manage.com/subscribe/post?u=${FORM_USER}&amp;id=${FORM_ID}`;
+
+  const handleSubmit = values => {
+    Sentry.configureScope(scope => {
+      scope.setUser({
+        id: values.EMAIL,
+        username: values.EMAIL,
+        role: FORM_ID,
+      });
+    });
+  };
 
   return (
-    <form action={formAction} method="post" noValidate>
+    <form action={formAction} method="post" noValidate onSubmit={handleSubmit}>
       <Stack spacing={8}>
         <FormControl isRequired>
           <FormLabel htmlFor="mce-EMAIL">Email Address</FormLabel>
@@ -31,7 +44,7 @@ const SubscribeForm = () => {
         >
           <input
             type="text"
-            name="b_a5fccdceb916e00a46d603ed8_992a06eec8"
+            name={`b_${FORM_USER}_${FORM_ID}`}
             tabIndex="-1"
             defaultValue=""
           />
