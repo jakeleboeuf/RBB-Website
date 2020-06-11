@@ -25,6 +25,7 @@ const NAV_HEIGHT = '100px';
 const PrimaryNav = forwardRef(
   ({ menuLinks, logoInformation, ...props }, ref) => {
     const [isVisible, setIsVisible] = useState(INITIAL_TOGGLE_STATE);
+    const showSubscribeButton = !getUser('subscription');
     const isMedium = useThemeBreakpoint('md');
     const theme = useTheme();
     const toUpperCase = text => text.toUpperCase();
@@ -187,12 +188,13 @@ const PrimaryNav = forwardRef(
             ))}
             <NavItem marginLeft="auto">
               {/* Subscribe button when user is on web and a subscriber id is not found in local storage*/}
-              {isVisible && !getUser('subscription') && (
+              {isVisible && showSubscribeButton && (
                 <Flex justify={['center', 'center', 'flex-end']}>
                   <Button
                     display={['none', 'none', 'block']}
                     onClick={onOpen}
                     hidden={!isVisible || undefined}
+                    data-testid="subscribe"
                   >
                     Subscribe
                   </Button>
@@ -201,31 +203,40 @@ const PrimaryNav = forwardRef(
             </NavItem>
 
             {/* Subscribe button when user is on mobile */}
-            <NavItem
-              display={['none', 'block', 'none']}
-              p={[6, 6, 0]}
-              borderBottom={[
-                `1px solid ${theme.colors['rbb-black-100']}`,
-                `1px solid ${theme.colors['rbb-black-100']}`,
-                'none',
-              ]}
-            >
-              <Flex direction="row" justify={['center', 'center', 'flex-end']}>
-                <Button onClick={onOpen} hidden={!isVisible || undefined}>
-                  Subscribe
-                </Button>
-                <Modal isOpen={isOpen} onClose={onClose}>
-                  <ModalOverlay />
-                  <ModalContent>
-                    <ModalHeader>Subscribe</ModalHeader>
-                    <ModalCloseButton />
-                    <ModalBody paddingBottom="1.5rem">
-                      <SubscribeForm />
-                    </ModalBody>
-                  </ModalContent>
-                </Modal>
-              </Flex>
-            </NavItem>
+            {showSubscribeButton && (
+              <NavItem
+                display={['none', 'block', 'none']}
+                p={[6, 6, 0]}
+                borderBottom={[
+                  `1px solid ${theme.colors['rbb-black-100']}`,
+                  `1px solid ${theme.colors['rbb-black-100']}`,
+                  'none',
+                ]}
+              >
+                <Flex
+                  direction="row"
+                  justify={['center', 'center', 'flex-end']}
+                >
+                  <Button
+                    data-testid="subscribeMobile"
+                    onClick={onOpen}
+                    hidden={!isVisible || undefined}
+                  >
+                    Subscribe
+                  </Button>
+                  <Modal isOpen={isOpen} onClose={onClose}>
+                    <ModalOverlay />
+                    <ModalContent>
+                      <ModalHeader>Subscribe</ModalHeader>
+                      <ModalCloseButton />
+                      <ModalBody paddingBottom="1.5rem">
+                        <SubscribeForm />
+                      </ModalBody>
+                    </ModalContent>
+                  </Modal>
+                </Flex>
+              </NavItem>
+            )}
           </NavMenu>
         </Nav>
       </Box>
