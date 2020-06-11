@@ -11,7 +11,7 @@ describe('Subscription Form', () => {
     cy.visit('/');
   });
 
-  it('Subscribing hides the subscription button', () => {
+  it('Subscribing hides the subscription button on Desktop', () => {
     // Open the modal
     cy.findByTestId('subscribe').click();
 
@@ -25,6 +25,27 @@ describe('Subscription Form', () => {
     cy.visit('/');
 
     // Make sure the subscription button is hidden
+    cy.findByTestId('subscribe').should('not.exist');
+  });
+
+  it('Subscribing hides the subscription button on Mobile', () => {
+    cy.viewport('iphone-6');
+
+    // Open the modal
+    cy.findByTestId('menu').click();
+    cy.findByTestId('subscribe-mobile').click();
+
+    // Fill and Submit the form
+    cy.findByTestId('email').type(`${EMAIL}`);
+    cy.findByTestId('firstName').type('George');
+    cy.findByTestId('lastName').type('Floyd');
+    cy.get('form').submit();
+
+    // Go back go the site (form redirects to mailchimp)
+    cy.visit('/');
+
+    // Make sure the subscription button is hidden
+    cy.findByTestId('menu').click();
     cy.findByTestId('subscribe').should('not.exist');
   });
 });
