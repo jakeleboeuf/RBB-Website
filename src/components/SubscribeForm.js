@@ -3,28 +3,27 @@ import * as Sentry from '@sentry/browser';
 
 import { FormControl, FormLabel, Input, Stack, Text } from '@chakra-ui/core';
 import Button from './Button';
+import { toGlobalId } from '../utils/globalId';
+import { setUser } from '../utils/storage';
 
+// Some configurable things
 const FORM_USER = 'a5fccdceb916e00a46d603ed8';
 const FORM_ID = '992a06eec8';
+const FORM_ACTION = `https://rebuildblackbusiness.us10.list-manage.com/subscribe/post?u=${FORM_USER}&amp;id=${FORM_ID}`;
 
 const SubscribeForm = () => {
-  const formAction = `https://rebuildblackbusiness.us10.list-manage.com/subscribe/post?u=${FORM_USER}&amp;id=${FORM_ID}`;
   const [email, setEmail] = React.useState('');
 
-  const handleSubmit = e => {
-    console.log('Handle Submit');
-    Sentry.configureScope(scope => {
-      scope.setUser({
-        id: email,
-        username: email,
-        role: FORM_ID,
-      });
-    });
-  };
+  const identifySentryUser = () => {
+    const id = toGlobalId({ type: FORM_ID, id: email });
 
-  const handleSubmitCapture = props => {
-    console.log('Handle Submit Capture');
-    console.log('Props', props);
+    // Identify the user in Sentry
+    Sentry.configureScope(scope => {
+      scope.setUser({ id, role: FORM_ID });
+    });
+
+    // Store user ID locally
+    setUser({ type: 'subscription', user: id });
   };
 
   const handleChange = e => {
@@ -33,11 +32,10 @@ const SubscribeForm = () => {
 
   return (
     <form
-      action={formAction}
+      action={FORM_ACTION}
       method="post"
       noValidate
-      onSubmit={handleSubmit}
-      onSubmitCapture={handleSubmitCapture}
+      onSubmit={identifySentryUser}
     >
       <Stack spacing={8}>
         <FormControl isRequired>
