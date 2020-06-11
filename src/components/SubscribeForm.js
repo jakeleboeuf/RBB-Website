@@ -9,23 +9,46 @@ const FORM_ID = '992a06eec8';
 
 const SubscribeForm = () => {
   const formAction = `https://rebuildblackbusiness.us10.list-manage.com/subscribe/post?u=${FORM_USER}&amp;id=${FORM_ID}`;
+  const [email, setEmail] = React.useState('');
 
-  const handleSubmit = values => {
+  const handleSubmit = e => {
+    console.log('Handle Submit');
     Sentry.configureScope(scope => {
       scope.setUser({
-        id: values.EMAIL,
-        username: values.EMAIL,
+        id: email,
+        username: email,
         role: FORM_ID,
       });
     });
   };
 
+  const handleSubmitCapture = props => {
+    console.log('Handle Submit Capture');
+    console.log('Props', props);
+  };
+
+  const handleChange = e => {
+    setEmail(e.target.value);
+  };
+
   return (
-    <form action={formAction} method="post" noValidate onSubmit={handleSubmit}>
+    <form
+      action={formAction}
+      method="post"
+      noValidate
+      onSubmit={handleSubmit}
+      onSubmitCapture={handleSubmitCapture}
+    >
       <Stack spacing={8}>
         <FormControl isRequired>
           <FormLabel htmlFor="mce-EMAIL">Email Address</FormLabel>
-          <Input type="email" name="EMAIL" id="mce-EMAIL" />
+          <Input
+            type="email"
+            name="EMAIL"
+            id="mce-EMAIL"
+            value={email}
+            onChange={handleChange}
+          />
         </FormControl>
 
         <FormControl isRequired>
