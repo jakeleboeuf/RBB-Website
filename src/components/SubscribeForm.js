@@ -9,7 +9,7 @@ import { setUser } from '../utils/storage';
 // Some configurable things
 const FORM_USER = 'a5fccdceb916e00a46d603ed8';
 const FORM_ID = '992a06eec8';
-const FORM_ACTION = `https://rebuildblackbusiness.us10.list-manage.com/subscribe/post?u=${FORM_USER}&amp;id=${FORM_ID}`;
+export const FORM_ACTION = `https://rebuildblackbusiness.us10.list-manage.com/subscribe/post?u=${FORM_USER}&amp;id=${FORM_ID}`;
 
 const SubscribeForm = () => {
   const [email, setEmail] = React.useState('');
@@ -33,7 +33,7 @@ const SubscribeForm = () => {
   return (
     <form
       action={FORM_ACTION}
-      method="post"
+      method="POST"
       noValidate
       onSubmit={identifySentryUser}
     >
@@ -41,6 +41,7 @@ const SubscribeForm = () => {
         <FormControl isRequired>
           <FormLabel htmlFor="mce-EMAIL">Email Address</FormLabel>
           <Input
+            data-testid="email"
             type="email"
             name="EMAIL"
             id="mce-EMAIL"
@@ -51,12 +52,22 @@ const SubscribeForm = () => {
 
         <FormControl isRequired>
           <FormLabel htmlFor="mce-FNAME">First Name</FormLabel>
-          <Input type="text" name="FNAME" id="mce-FNAME" />
+          <Input
+            data-testid="firstName"
+            type="text"
+            name="FNAME"
+            id="mce-FNAME"
+          />
         </FormControl>
 
         <FormControl>
           <FormLabel htmlFor="mce-LNAME">Last Name</FormLabel>
-          <Input type="text" name="LNAME" id="mce-LNAME" />
+          <Input
+            data-testid="lastName"
+            type="text"
+            name="LNAME"
+            id="mce-LNAME"
+          />
         </FormControl>
 
         <div
