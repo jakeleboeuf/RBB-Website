@@ -219,7 +219,7 @@ const PrimaryNav = forwardRef(
                   justify={['center', 'center', 'flex-end']}
                 >
                   <Button
-                    data-testid="subscribeMobile"
+                    data-testid="subscribe-mobile"
                     onClick={onOpen}
                     hidden={!isVisible || undefined}
                   >
