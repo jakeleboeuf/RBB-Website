@@ -22,6 +22,19 @@ Cypress.Commands.add(
   }
 );
 
+const clear = Cypress.LocalStorage.clear;
+
+Cypress.LocalStorage.clear = function (keys, ls, rs) {
+  const whitelistKeys = ['user::subscription'];
+  if (keys && keys.length == 0) {
+    keys = Object.keys(localStorage);
+  }
+  keys = keys.filter(function (i) {
+    return whitelistKeys.indexOf(i) < 0;
+  });
+  return clear.apply(this, arguments);
+};
+
 //
 //
 // -- This is a parent command --
