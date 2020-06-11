@@ -18,6 +18,7 @@ import Button from '../components/Button';
 import SubscribeForm from '../components/SubscribeForm';
 import Image from './Image';
 import { Nav, NavItem, NavLink, NavMenu } from './Nav';
+import { getUser } from '../utils/storage';
 const INITIAL_TOGGLE_STATE = false;
 const NAV_HEIGHT = '100px';
 
@@ -185,8 +186,8 @@ const PrimaryNav = forwardRef(
               </NavItem>
             ))}
             <NavItem marginLeft="auto">
-              {/* Subscribe button when user is on web */}
-              {isVisible ? (
+              {/* Subscribe button when user is on web and a subscriber id is not found in local storage*/}
+              {isVisible && !getUser('subscription') && (
                 <Flex justify={['center', 'center', 'flex-end']}>
                   <Button
                     display={['none', 'none', 'block']}
@@ -196,7 +197,7 @@ const PrimaryNav = forwardRef(
                     Subscribe
                   </Button>
                 </Flex>
-              ) : null}
+              )}
             </NavItem>
 
             {/* Subscribe button when user is on mobile */}
