@@ -79,6 +79,7 @@ const PrimaryNav = forwardRef(
         >
           <Box display={['block', 'block', 'none']} ml={{ sm: '5' }}>
             <button
+              data-testid="menu"
               onClick={handleToggle}
               aria-expanded={isVisible && !isMedium}
               aria-controls="navigation"
